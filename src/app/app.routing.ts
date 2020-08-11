@@ -14,3 +14,7 @@ export const routing: ModuleWithProviders = RouterModule.forRoot(AppRoutes, { us
 
 // feedback
 //http://localhost:4220/#/feedback?formid=5c5a6531a6ae2f27880282b6&contextid=59e4a4c5bd4e4bb2fb59fd7e&objectid=5c52cb6d17eea16f9c31640d&https=false&domain=localhost:3001
+
+//http://localhost:4220/#/feedback?formid=5c5a6531a6ae2f27880282b6&contextid=59e4a4c5bd4e4bb2fb59fd7e&objectid=5c52cb6d17eea16f9c31640d&https=false&domain=app.clubhozo.com
+
+
