@@ -1,0 +1,261 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-6 col-lg-offset-3">
+                <div class="card">
+                    <div class="card-header card-header-tabs" data-background-color="rose">
+                        <div class="nav-tabs-navigation">
+                            <div class="nav-tabs-wrapper">
+                                <ul class="nav nav-tabs" data-tabs="tabs">
+                                    <li class="active">
+                                        <a href="#feedback" data-toggle="tab">
+                                            <i class="material-icons">feedback</i> Feedback
+                                            <div class="ripple-container"></div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-content">
+                        <div class="tab-content">
+                            <div class="tab-pane active">
+                                <div class="form-horizontal">
+
+                                    
+                                    
+                                    <form 
+                                        #formtext 
+                                        *ngIf="dynamicForm"
+                                        (ngSubmit)="onDynamicFormSubmit(dynamicForm.value, dynamicForm.valid)"
+                                        [formGroup]="dynamicForm" novalidate class="">
+                                        <div>
+                                            <div class="loader" *ngIf="!visibility">
+                                                <svg class="circular" viewBox="25 25 50 50">
+                                                    <circle class="path" cx="50" cy="50" r="20" fill="none"
+                                                        stroke-width="2" stroke-miterlimit="10" />
+                                                </svg>
+                                            </div>
+
+                                            <ng-container *ngIf="visibility">
+                                                <div *ngFor="let section of _sectionLists">
+
+                                                    <div class="row" *ngFor="let fields of section; let lst = last">
+                                                        <div [ngSwitch]="fields.fieldtype">
+                                                            <div *ngIf="fields.isHidden != 'yes'">
+
+
+                                                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'text'">
+                                                                    <div class="form-group no-float is-empty"
+                                                                        [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                                                        <label class="control-label mrb15">
+                                                                            {{fields.fielddisplaytext}}
+                                                                            <span *ngIf="fields.isAsterisk"
+                                                                                style="color: red">*</span>
+                                                                        </label>
+                                                                        <div>
+                                                                            <input 
+                                                                                #firsttext 
+                                                                                type="text"
+                                                                                class="form-control font18"
+                                                                                [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine ) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                                                                [formControlName]="fields.fieldname"
+                                                                                [(ngModel)]="fields.value">
+                                                                        </div>
+                                                                        <span class="help-block">
+                                                                            {{fields.description}}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'rating'">
+                                                                    <div class="form-group no-float is-empty"
+                                                                        [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                                                        <label class="control-label mrb15">
+                                                                            {{fields.fielddisplaytext}}
+                                                                            <span *ngIf="fields.isAsterisk"
+                                                                                style="color: red">*</span>
+                                                                        </label>
+                                                                        <div>
+                                                                            <ngb-rating max="{{fields.maxrating}}"
+                                                                                [(ngModel)]="fields.value"
+                                                                                [formControlName]="fields.fieldname">
+                                                                            </ngb-rating>
+
+                                                                            
+                                                                        </div>
+
+                                                                        <span
+                                                                            class="help-block">{{fields.description}}</span>
+                                                                    </div>
+                                                                </div>
+
+
+                                                                <div class="col-sm-offset-2 col-sm-8"
+                                                                    *ngSwitchCase="'long_text'">
+                                                                    <div class="form-group no-float is-empty"
+                                                                        [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                                                        <label class="control-label">
+                                                                            {{fields.fielddisplaytext}}
+                                                                            <span *ngIf="fields.isAsterisk"
+                                                                                style="color: red">*</span>
+                                                                        </label>
+
+                                                                        <textarea type="text" class="form-control"
+                                                                            [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                                                            [formControlName]="fields.fieldname"
+                                                                            [(ngModel)]="fields.value">
+                                                          </textarea>
+                                                                        <span
+                                                                            class="help-block">{{fields.description}}</span>
+                                                                    </div>
+                                                                </div>
+
+
+                                                                <div class="col-sm-offset-2 col-sm-8"
+                                                                    *ngSwitchCase="'attachment'">
+
+                                                                    <label class="control-label">
+                                                                        {{fields.fielddisplaytext}}
+                                                                        <span *ngIf="fields.isAsterisk"
+                                                                            style="color: red">*</span>
+                                                                    </label>
+
+
+                                                                    <div class="form-group">
+
+                                                                        <img class="loading"
+                                                                            src="assets/img/image-loader.GIF"
+                                                                            style="height: 100px; width: 100px; display: none">
+
+                                                                        <div *ngIf="dynamicForm">
+                                                                            <div
+                                                                                *ngFor="let item of formImageArray[fields.fieldname]">
+                                                                                <div class="choose-photo-relative">
+
+                                                                                    <img *ngIf="item.extension == 'xlsx' || item.extension == 'xls'"
+                                                                                        src="assets/img/xlsx.png"
+                                                                                        style="height: 100px; width: 100px;">
+                                                                                    <img *ngIf="item.extension == 'doc' || item.extension == 'docx'"
+                                                                                        src="assets/img/doc.png"
+                                                                                        style="height: 100px; width: 100px;">
+                                                                                    <img *ngIf="item.extension == 'ppt' || item.extension == 'pptx'"
+                                                                                        src="assets/img/ppt.png"
+                                                                                        style="height: 100px; width: 100px;">
+                                                                                    <img *ngIf="item.extension == 'csv'"
+                                                                                        src="assets/img/csv.png"
+                                                                                        style="height: 100px; width: 100px;">
+                                                                                    <img *ngIf="item.extension == 'pdf'"
+                                                                                        src="assets/img/pdf.png"
+                                                                                        style="height: 100px; width: 100px;">
+                                                                                    <img *ngIf="item.extension !== 'xlsx' && item.extension !== 'xls' && item.extension !== 'doc' && item.extension !== 'docx' && item.extension !== 'pdf' && item.extension == 'ppt' && item.extension == 'pptx' && item.extension == 'csv'"
+                                                                                        src="assets/img/others.png"
+                                                                                        style="height: 100px; width: 100px;">
+                                                                                    <img *ngIf="item.extension == 'jpg' || item.extension == 'jpeg' || item.extension == 'gif' || item.extension == 'png' || item.extension == 'tif' || item.extension == 'tiff'"
+                                                                                        [src]="item.attachment"
+                                                                                        style="height: 100px; width: 100px;">
+                                                                                    <audio controls
+                                                                                        *ngIf="item.extension == 'mp3'">
+
+                                                                                        <source [src]="item.attachment"
+                                                                                            type="audio/mpeg">
+                                                                                        Your browser does not support the audio element
+                                                                                    </audio>
+
+                                                                                    <i class="material-icons upload-img-close"
+                                                                                        (click)="removeImg(item, fields.fieldname)"
+                                                                                        [style.right]="item.extension == 'mp3' ? '-132px' : null">cancel</i>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="btn btn-round btn-rose btn-file">
+                                                                            <label class="upload_button upload-custom"
+                                                                                for="fileupload_{{fields.fieldname}}">
+                                                                                Upload </label>
+                                                                            <input type="file"
+                                                                                id="fileupload_{{fields.fieldname}}"
+                                                                                #fileInput ng2FileSelect
+                                                                                [style.display]="'none'"
+                                                                                [uploader]="customeUploader[fields.fieldname]"
+                                                                                (change)="fileInput.value=''"
+                                                                                multiple />
+                                                                            <input type="hidden" [id]="fields.fieldname"
+                                                                                [formControlName]="fields.fieldname"
+                                                                                [(ngModel)]="fields.value">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+
+                                                                <div class="col-sm-offset-2 col-sm-8"
+                                                                    *ngSwitchCase="'lookup'">
+                                                                    <div class="form-group no-float is-empty">
+                                                                        <label class="control-label">
+
+                                                                            {{fields.fielddisplaytext}}
+                                                                            <span *ngIf="fields.isAsterisk"
+                                                                                style="color: red">*</span>
+
+                                                                        </label>
+
+                                                                        <input type="text" class="form-control"
+                                                                            ngui-auto-complete
+                                                                            [list-formatter]="autocompleListFormatter"
+                                                                            [source]="fields.inbuildlookupFieldValue"
+                                                                            value-property-name=null
+                                                                            display-property-name="name"
+                                                                            [formControlName]="fields.fieldname"
+                                                                            [(ngModel)]="fields.value"
+                                                                            placeholder="Select {{fields.fielddisplaytext}}">
+
+                                                                        <span
+                                                                            class="help-block">{{fields.description}}</span>
+                                                                    </div>
+                                                                </div>
+
+
+
+                                                                <small style="margin-left:18%;"
+                                                                    [hidden]="dynamicForm.get([fields.fieldname]).valid || (dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted)"
+                                                                    class="text-danger"> "{{fields.fielddisplaytext}}"
+                                                                    is
+                                                                    {{(fields.isMandatory === 'yes') ? 'Required' : ''}}
+                                                                    {{(fields.validationData === 'emailVal') ? ' Invalid Email' :
+                                                      ((fields.validationData === 'urlVal') ? ' Invalid Url' :
+                                                      ((fields.validationData === 'onlyNumberVal') ? ' Invalid number' :
+                                                      ((fields.validationData === 'mobileNumberVal') ? ' Invalid Mob.No.' : 
+                                                      ((fields.validationData === 'onlyNumberOrDecimalVal') ? ' Invalid Number Or Decimal' :
+                                                      ((fields.validationData === 'validPercentVal') ? ' Invalid percent' : '')))))}}
+                                                                </small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+                                                <div class="row">
+
+                                                    <div class="col-sm-12 text-right">
+                                                        <button class="btn btn-rose btn-full-width" type="submit"
+                                                            [disabled]="isdisablesavebutton">
+                                                            <i class="material-icons">save</i>Submit
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
