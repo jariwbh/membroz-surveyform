@@ -13,8 +13,6 @@ import { CommonService } from '../core/services/common/common.service';
 
 import { FormsModel } from '../core/models/forms/forms.model';
 
-
-
 import { Cloudinary } from '@cloudinary/angular-5.x';
 import { FileUploaderOptions, FileUploader, ParsedResponseHeaders } from 'ng2-file-upload';
 
@@ -549,7 +547,7 @@ export class FeedbackComponent implements OnInit {
           this.showNotification('top', 'right', this.jsUcfirst(this.formsModel.dispalyformname) + ' has been added successfully!!!', 'success');
           console.log(this.jsUcfirst(this.formsModel.dispalyformname) + ' has been added successfully!!!');
 
-          this.router.navigate(["feedback-success"]);
+          this.router.navigate(["success"]);
 
           // let currenturl = window.location.href;
           // let finalurl;

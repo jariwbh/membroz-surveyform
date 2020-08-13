@@ -42,8 +42,6 @@ import {
 
 import { routing } from './app.routing';
 import { AppComponent } from './app.component';
-import { FeedbackComponent } from './feedback/feedback.component';
-import { SuccessComponent } from './success/success.component';
 
 import { Configuration } from './app.constants';
 import { PublicService } from './core/services/public/public.service';
@@ -53,8 +51,6 @@ import { CommonService } from './core/services/common/common.service';
 
 import { SafeHtmlPipe } from "./core/pipes/safehtml.pipe";
 
-// File upload module
-import {FileUploadModule} from 'ng2-file-upload';
 // Cloudinary module
 import { Cloudinary } from 'cloudinary-core';
 import { CloudinaryModule, CloudinaryConfiguration } from '@cloudinary/angular-5.x';
@@ -64,7 +60,6 @@ const cloudinaryLib = {
   Cloudinary: Cloudinary
 };
 
-import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 
 @NgModule({
   exports: [
@@ -104,8 +99,6 @@ import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 export class MaterialModule {}
 
 
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
 @NgModule({
   imports: [
     CommonModule,
@@ -116,16 +109,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     FormsModule,
     ReactiveFormsModule,
     CloudinaryModule.forRoot(cloudinaryLib, config),
-    FileUploadModule,
-    NguiAutoCompleteModule,
     MaterialModule,
-    NgbModule
   ],
   declarations: [
     AppComponent,
     SafeHtmlPipe,
-    FeedbackComponent,
-    SuccessComponent
   ],
   providers: [
     Configuration,
