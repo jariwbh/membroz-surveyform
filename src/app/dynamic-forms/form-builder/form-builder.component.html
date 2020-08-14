@@ -1,0 +1,589 @@
+<form #formtext *ngIf="dynamicForm" (ngSubmit)="onDynamicFormSubmit(dynamicForm.value, dynamicForm.valid)"
+    [formGroup]="dynamicForm" novalidate class="form-horizontal">
+    <div class="card-content">
+        <div *ngFor="let section of _sectionLists">
+            <div *ngIf="section[0].tabname == tabDataValue[0][0].tabname">
+                <h3>{{section[0].sectiondisplaytext}}</h3>
+                <div class="row" *ngFor="let fields of section; let lst = last">
+                    <div [ngSwitch]="fields.fieldtype">
+                        
+                        <div *ngIf="!fields.groupname">
+                            <div *ngIf="fields.isHidden != 'yes'">
+
+                                <label class="col-sm-2 label-on-left">
+                                    {{fields.key && fields.key.fielddisplaytext && fields.key.fielddisplaytext.value && fields.key.fielddisplaytext.value[defaultLanguage] ? fields.key.fielddisplaytext.value[defaultLanguage] : fields.fielddisplaytext ? fields.fielddisplaytext : fields.fieldname}}
+                                    <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+                                </label>
+
+                                <div class="col-sm-10" *ngSwitchCase="'slide_toggle'">
+                                    <div class="form-group label-floating is-empty has-error">
+                                        <label class="control-label"></label>
+                                        <mat-slide-toggle
+                                            [id]="fields.fieldname"
+                                            class="example-margin"
+                                            [checked]="fields.value"
+                                            [formControlName]="fields.fieldname" 
+                                            [(ngModel)]="fields.value">
+                                        </mat-slide-toggle>
+
+
+                                        
+
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'disclaimer'">
+                                    <div class="form-group label-floating is-empty"
+                                        [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <p style="color: red;" class="form-control-static">{{fields.defaultvalue}}</p>
+                                        <input 
+                                            #firsttext 
+                                            type="hidden" 
+                                            class="form-control" 
+                                            readonly
+                                            [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            [formControlName]="fields.fieldname" 
+                                            [(ngModel)]="fields.defaultvalue">
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'readonly'">
+                                    <div class="form-group label-floating is-empty"
+                                        [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <label class="control-label"></label>
+                                        <input 
+                                            #firsttext 
+                                            type="text" 
+                                            class="form-control" 
+                                            readonly
+                                            [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            [formControlName]="fields.fieldname" 
+                                            [(ngModel)]="fields.defaultvalue">
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'time_only'">
+                                    <div class="form-group label-floating is-empty"
+                                        [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <label class="control-label"></label>
+                                        <input 
+                                            #firsttext 
+                                            class="form-control" 
+                                            [owlDateTimeTrigger]="dt2" 
+                                            [owlDateTime]="dt2"
+                                            [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            [formControlName]="fields.fieldname" 
+                                            [(ngModel)]="fields.value">
+                                        <owl-date-time 
+                                            [pickerType]="'timer'" 
+                                            #dt2 hour12Timer=true>
+                                        </owl-date-time>
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'calendar_timer'">
+                                    <div class="form-group label-floating is-empty"
+                                        [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <label class="control-label"></label>
+                                        <input 
+                                            #firsttext 
+                                            class="form-control" 
+                                            [owlDateTimeTrigger]="dt2calendartime" 
+                                            [owlDateTime]="dt2calendartime"
+                                            [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            [formControlName]="fields.fieldname"
+                                            [(ngModel)]="fields.value">
+                                        <owl-date-time 
+                                            [pickerType]="'both'" 
+                                            #dt2calendartime hour12Timer=true>
+                                        </owl-date-time>
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'number'">
+                                    <div class="form-group label-floating is-empty"
+                                        [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <label class="control-label"></label>
+                                        <input #firsttext type="number" class="form-control"
+                                            [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            [formControlName]="fields.fieldname" [(ngModel)]="fields.value">
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'text'">
+                                    <div class="form-group label-floating is-empty"
+                                        [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <label class="control-label"></label>
+                                        <input #firsttext type="text" class="form-control"
+                                            [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            [formControlName]="fields.fieldname" [(ngModel)]="fields.value">
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'editor'">
+                                    <div 
+                                        class="form-group label-floating is-empty"
+                                        [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <label class="control-label"></label>
+
+                                        <div id="summernote_{{fields.fieldname}}"></div>
+
+                                        <input 
+                                            #firsttext 
+                                            type="hidden" 
+                                            class="form-control"
+                                            [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            [formControlName]="fields.fieldname" 
+                                            [(ngModel)]="fields.value">
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'audio'">
+                                    <div class="form-group label-floating is-empty"
+                                        [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <label class="control-label"></label>
+                                        <input #firsttext type="text" class="form-control"
+                                            [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            [formControlName]="fields.fieldname" [(ngModel)]="fields.value">
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'email'">
+                                    <div class="form-group label-floating is-empty"
+                                        [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <label class="control-label"></label>
+                                        <input #firsttext type="text" class="form-control"
+                                            [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            [formControlName]="fields.fieldname" [(ngModel)]="fields.value">
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'mobile'">
+                                    <div class="form-group label-floating is-empty"
+                                        [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <label class="control-label"></label>
+                                        <input #firsttext type="text" class="form-control"
+                                            [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            [formControlName]="fields.fieldname" [(ngModel)]="fields.value">
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'mobilewithcountrycode'">
+                                    <div class="form-group label-floating is-empty"
+                                        [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <label class="control-label"></label>
+                                        <ngx-intl-tel-input
+                                            [inputId]="'adsasd'"
+                                            [cssClass]="'custom form-control'" 
+                                            [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            [preferredCountries]="preferredCountries"
+                                            [enableAutoCountrySelect]="false" 
+                                            [enablePlaceholder]="true" 
+                                            [searchCountryFlag]="true"
+                                            [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                                            [selectFirstCountry]="false" 
+                                            [selectedCountryISO]="fields.value && fields.value.countryCode ? fields.value.countryCode : CountryISO.India"
+                                            [maxLength]="15" 
+                                            [tooltipField]="TooltipLabel.Name" 
+                                            [phoneValidation]="true" 
+                                            [separateDialCode]="separateDialCode"
+                                            [formControlName]="fields.fieldname" 
+                                            [(ngModel)]="fields.value">
+                                        </ngx-intl-tel-input>
+
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'long_text'">
+                                    <div class="form-group label-floating is-empty"
+                                        [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <label class="control-label"></label>
+                                        <input type="text" class="form-control"
+                                            [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            value [formControlName]="fields.fieldname" [(ngModel)]="fields.value">
+                                        <textarea class="form-control"> </textarea>
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'attachment'">
+                                    <div class="form-group">
+
+                                        <img class="loading_{{fields.fieldname}}" src="assets/img/image-loader.GIF"
+                                            style="height: 100px; width: 100px; display: none">
+
+                                        <div *ngIf="dynamicForm">
+                                            <div *ngFor="let item of formImageArray[fields.fieldname]">
+                                                <div class="choose-photo-relative">
+
+                                                    <img *ngIf="item.extension == 'xlsx' || item.extension == 'xls'"
+                                                        src="assets/img/xlsx.png" style="height: 100px; width: 100px;">
+                                                    <img *ngIf="item.extension == 'doc' || item.extension == 'docx'"
+                                                        src="assets/img/doc.png" style="height: 100px; width: 100px;">
+                                                    <img *ngIf="item.extension == 'ppt' || item.extension == 'pptx'"
+                                                        src="assets/img/ppt.png" style="height: 100px; width: 100px;">
+                                                    <img *ngIf="item.extension == 'csv'" src="assets/img/csv.png"
+                                                        style="height: 100px; width: 100px;">
+                                                    <img *ngIf="item.extension == 'pdf'" src="assets/img/pdf.png"
+                                                        style="height: 100px; width: 100px;">
+                                                    <img *ngIf="item.extension !== 'xlsx' && item.extension !== 'xls' && item.extension !== 'doc' && item.extension !== 'docx' && item.extension !== 'pdf' && item.extension == 'ppt' && item.extension == 'pptx' && item.extension == 'csv'"
+                                                        src="assets/img/others.png"
+                                                        style="height: 100px; width: 100px;">
+                                                    <img *ngIf="item.extension == 'jpg' || item.extension == 'jpeg' || item.extension == 'gif' || item.extension == 'png' || item.extension == 'tif' || item.extension == 'tiff'"
+                                                        [src]="item.attachment" style="height: 100px; width: 100px;">
+
+                                                    <i class="material-icons upload-img-close"
+                                                        (click)="removeImg(item, fields.fieldname)">cancel</i>
+
+                                                    <button type="button" class="btn btn-primary"
+                                                        (click)="downloadlink(item.attachment)"> Download </button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="btn btn-round btn-rose btn-file">
+                                            <label class="upload_button" for="fileupload_{{fields.fieldname}}">
+                                                Upload </label>
+                                            <input type="file" id="fileupload_{{fields.fieldname}}" #fileInput
+                                                ng2FileSelect [style.display]="'none'"
+                                                [uploader]="customeUploader[fields.fieldname]"
+                                                (change)="fileInput.value=''" multiple />
+                                            <input type="hidden" [id]="fields.fieldname"
+                                                [formControlName]="fields.fieldname" [(ngModel)]="fields.value">
+                                        </div>
+
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'image'">
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3">
+                                            <div class="form-group">
+                                                <img class="loading" src="assets/img/image-loader.GIF"
+                                                    style="height: 100px; width: 100px; display: none">
+
+                                                <div *ngIf="dynamicForm">
+                                                    <div *ngFor="let item of formImageArray[fields.fieldname]">
+                                                        <div class="choose-photo-relative">
+                                                            <img [src]="item.attachment"
+                                                                style="height: 200px; width: 200px;">
+                                                            <i class="material-icons upload-img-close"
+                                                                (click)="removeImg(item, fields.fieldname)">cancel</i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="btn btn-round btn-rose btn-file">
+
+                                                    <label class="upload_button upload-custom"
+                                                        for="fileupload_{{fields.fieldname}}">
+                                                        Choose Photo </label>
+                                                    <input type="file" id="fileupload_{{fields.fieldname}}" #fileInput
+                                                        ng2FileSelect [style.display]="'none'"
+                                                        [uploader]="customeUploader[fields.fieldname]"
+                                                        (change)="fileInput.value=''" />
+                                                    <input type="hidden" [id]="fields.fieldname"
+                                                        [formControlName]="fields.fieldname" [(ngModel)]="fields.value">
+                                                </div>
+
+
+                                                <span class="help-block">{{fields.description}}</span>
+
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'multi_image'">
+                                    <div class="form-group">
+                                        <img class="loading" src="assets/img/image-loader.GIF"
+                                            style="height: 100px; width: 100px; display: none">
+
+                                        <div *ngIf="dynamicForm">
+                                            <div *ngFor="let item of dynamicForm.value[fields.fieldname]">
+                                                <img [src]="item" style="height: 100px; width: 100px;">
+                                                <button type="button" class="btn btn-default"
+                                                    (click)="removeImg(item, fields.fieldname)"
+                                                    value="Remove">Remove</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="btn btn-round btn-rose btn-file">
+                                            <label class="upload_button" for="fileupload_{{fields.fieldname}}">
+                                                Upload </label>
+                                            <input type="file" id="fileupload_{{fields.fieldname}}" #fileInput
+                                                ng2FileSelect [style.display]="'none'"
+                                                [uploader]="customeUploader[fields.fieldname]"
+                                                (change)="fileInput.value=''" multiple />
+                                            <input type="hidden" [id]="fields.fieldname"
+                                                [formControlName]="fields.fieldname" [(ngModel)]="fields.value">
+                                        </div>
+
+                                        <span class="help-block">{{fields.description}}</span>
+                                        
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'list'">
+
+                                    <div class="form-group label-floating is-empty">
+                                        <label class="control-label"></label>
+
+                                        <mat-form-field class="example-full-width">
+                                            <input 
+                                                matInput 
+                                                placeholder="Select" 
+                                                aria-label="Select"
+                                                [matAutocomplete]="auto" 
+                                                [formControlName]="fields.fieldname"
+                                                [(ngModel)]="fields.value">
+                                            <mat-autocomplete #auto="matAutocomplete">
+                                                <mat-option *ngFor="let opt of fields.lookupdata" [value]="opt.value">
+                                                    <span>{{ opt.value }}</span>
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                        </mat-form-field>
+
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'multi_selected_list'">
+
+                                    <div class="form-group label-floating is-empty">
+                                        <label class="control-label"></label>
+                                        <select multiple [formControlName]="fields.fieldname" [(ngModel)]="fields.value"
+                                            class="selectpicker">
+                                            <option value="">Select {{fields.fielddisplaytext}}</option>
+                                            <option *ngFor="let opt of fields.lookupdata" [value]="opt.value">
+                                                {{opt.value}}
+                                            </option>
+                                        </select>
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'checkbox'">
+                                    <div class="form-group label-floating is-empty">
+                                        <label class="control-label"></label>
+                                        <div style="margin-top: 0px! important;" class="checkbox checkbox-inline"
+                                            *ngFor="let look of fields.lookupdata; let i = index">
+                                            <label>
+                                                <input 
+                                                    type="checkbox" 
+                                                    id="check_{{fields.fieldname}}_{{i}}"
+                                                    [value]="look.value"
+                                                    [formControlName]="fields.fieldname">
+                                                    {{look.value}}
+                                                </label>
+
+                                                
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'radio'">
+                                    <div class="form-group label-floating is-empty">
+                                        <label class="control-label"></label>
+
+                                        <mat-radio-group aria-label="Select an option" [formControlName]="fields.fieldname" [(ngModel)]="fields.value">
+                                            <mat-radio-button id="radio_{{fields.fieldname}}_{{i}}" *ngFor="let look of fields.lookupdata; let i = index" [value]="look.value">{{look.value}}</mat-radio-button>
+                                        </mat-radio-group>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'datepicker'">
+                                    <div class="form-group label-floating is-empty"
+                                        [ngClass]="!(dynamicForm.get([fields.fieldname]).valid || (dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted)) ? 'has-error' : ' '">
+                                        <label class="control-label"></label>
+                                        
+                                        <mat-form-field>
+                                            <input 
+                                                [id]="fields.fieldname" 
+                                                matInput 
+                                                [min]="minDate" 
+                                                [max]="fields.maxDate ? fields.maxDate : maxDate" 
+                                                [matDatepicker]="resultPicker"
+                                                [formControlName]="fields.fieldname" 
+                                                [(ngModel)]="fields.value"
+                                                placeholder="">
+                                            <span class="help-block"
+                                                style="margin-top: 11px;display: block;">{{gDateFormat}}</span>
+                                            <mat-datepicker-toggle 
+                                                matSuffix 
+                                                [for]="resultPicker">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #resultPicker [startAt]="startDate"></mat-datepicker>
+                                        </mat-form-field>
+
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'form'">
+                                    <div class="form-group label-floating is-empty">
+                                        <label class="control-label"></label>
+                                        <input 
+                                            [readonly]="fields.readonly" 
+                                            type="text" 
+                                            class="form-control"
+                                            ngui-auto-complete 
+                                            [list-formatter]="autocompleListFormatter"
+                                            [source]="fields.formfieldfilterValue" 
+                                            value-property-name=null
+                                            display-property-name="name" 
+                                            [formControlName]="fields.fieldname"
+                                            [(ngModel)]="fields.value" 
+                                            placeholder="Select {{fields.fielddisplaytext}}">
+
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'form_multiselect'">
+                                    <div class="form-group label-floating is-empty">
+                                        <label class="control-label"></label>
+                                        <angular2-multiselect [data]="fields.formfieldfilterValue"
+                                            [(ngModel)]="fields.value" [formControlName]="fields.fieldname"
+                                            [settings]="Texts">
+                                        </angular2-multiselect>
+
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'formdata'">
+                                    <div class="form-group label-floating is-empty">
+                                        <label class="control-label"></label>
+                                        <input 
+                                            [readonly]="fields.readonly" 
+                                            type="text" 
+                                            class="form-control"
+                                            ngui-auto-complete 
+                                            [list-formatter]="autocompleListFormatter"
+                                            [source]="fields.formfieldfilterValue" 
+                                            value-property-name="id"
+                                            display-property-name="name" 
+                                            [formControlName]="fields.fieldname"
+                                            [(ngModel)]="fields.value" 
+                                            placeholder="Select {{fields.fielddisplaytext}}">
+
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-10" *ngSwitchCase="'lookup'">
+                                    <div class="form-group label-floating is-empty">
+                                        <label class="control-label"></label>
+
+                                        <input type="text" class="form-control" ngui-auto-complete
+                                            [list-formatter]="autocompleListFormatter"
+                                            [source]="fields.inbuildlookupFieldValue" value-property-name=null
+                                            display-property-name="name" [formControlName]="fields.fieldname"
+                                            [(ngModel)]="fields.value" placeholder="Select {{fields.fielddisplaytext}}">
+
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div style="margin-left:18%;"
+                                    [hidden]="dynamicForm.get([fields.fieldname]).valid || (dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted)"
+                                    class="text-danger">
+
+                                    <small *ngIf="dynamicForm.get([fields.fieldname]).hasError('required')" class="error-label"> 
+                                        * {{fields.fielddisplaytext}} is Required
+                                    </small>
+
+                                    <small *ngIf="dynamicForm.get([fields.fieldname]).hasError('adultDateVal')" class="error-label"> 
+                                        * {{fields.fielddisplaytext}} should be 18+
+                                    </small>
+
+                                    <small *ngIf="dynamicForm.get([fields.fieldname]).hasError('email')" class="error-label"> 
+                                        * {{fields.fielddisplaytext}} is Invalid Email
+                                    </small>
+
+                                    <small *ngIf="dynamicForm.get([fields.fieldname]).hasError('insertonlyvalidurl')" class="error-label"> 
+                                        * {{fields.fielddisplaytext}} is Invalid Url
+                                    </small>
+
+                                    <small *ngIf="dynamicForm.get([fields.fieldname]).hasError('insertonlynumber')" class="error-label"> 
+                                        * {{fields.fielddisplaytext}} is Invalid number
+                                    </small>
+
+                                    <small *ngIf="dynamicForm.get([fields.fieldname]).hasError('onlyvalidmobilenumber')" class="error-label"> 
+                                        * {{fields.fielddisplaytext}} is Invalid.
+                                    </small>
+
+                                    <small *ngIf="dynamicForm.get([fields.fieldname]).hasError('insertonlynumberordecimal')" class="error-label"> 
+                                        * {{fields.fielddisplaytext}} is Invalid Number Or Decimal
+                                    </small>
+
+                                    <small *ngIf="dynamicForm.get([fields.fieldname]).hasError('insertonlynumberordecimal')" class="error-label"> 
+                                        * {{fields.fielddisplaytext}} is Invalid Number Or Decimal
+                                    </small>
+
+                                    <small *ngIf="dynamicForm.get([fields.fieldname]).hasError('validatePhoneNumber')" class="error-label"> 
+                                        * {{fields.fielddisplaytext}} is Invalid
+                                    </small>
+
+                                </div>
+                            </div>
+                            <div *ngIf="fields.isHidden == 'yes'">
+
+                                <input 
+                                    *ngIf="fields.fieldtype == 'readonly'"
+                                    type="hidden" 
+                                    class="form-control" 
+                                    readonly
+                                    [formControlName]="fields.fieldname" 
+                                    [(ngModel)]="fields.defaultvalue">
+
+                                <input 
+                                    *ngIf="fields.fieldtype !== 'readonly'"
+                                    type="hidden" 
+                                    class="form-control" 
+                                    [formControlName]="fields.fieldname"
+                                    [(ngModel)]="fields.value">
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+               
+            </div>
+            <div class="col-sm-6 text-right">
+                <button class="btn btn-default btn-full-width" type="button"
+                    [routerLink]="['/pages/dynamic-list/list/' + formsModelValue[0]['formname']]">
+                    <i class="material-icons">close</i> Cancel
+                </button>
+                
+                <button class="btn btn-rose btn-full-width" type="submit" [disabled]="isdisablesavebuttonValue">
+                    <i class="material-icons">save</i> {{_labelSubmit}}
+                </button>
+
+            </div>
+        </div>
+    </div>
+</form>

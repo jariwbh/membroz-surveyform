@@ -1,0 +1,61 @@
+.page-header {
+    padding-bottom: 9px;
+    margin: 40px 0 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.chapter-header{
+    font-size: 24px;
+    margin: 40px 0 20px;
+}
+
+.example {
+    padding: 20px;
+}
+
+.example p, .example div.row, .example img {
+    margin: 30px 0 20px;
+}
+
+.example li {
+    margin: 5px 0 5px;
+}
+
+
+.disabled-cls {
+    pointer-events:none;
+    opacity:0.7;
+}
+.wizard-card {
+    box-shadow: none !important;
+}
+
+.card {
+    .nav-pills {
+        margin-top: 0;
+    }
+    .tab-content {
+        margin-top: 0;
+    }
+    &.mrt0 {
+       margin-top: 0;
+    } 
+}
+.tab-content {
+    padding: 20px 0;
+} 
+.tab-pane {
+    tbody > tr > td:first-child{
+        width: auto !important;
+    }
+}
+.nav-pills > li .material-icons {
+    margin: -1px 5px 0 0;
+    display: inline;
+    font-size: 24px;
+    padding: 0;
+}
+
+.switchOn {
+    color: rgba(0,0,0, 1)
+}

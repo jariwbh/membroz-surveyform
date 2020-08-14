@@ -1,0 +1,10 @@
+.form-group /deep/ .ngui-auto-complete {max-height: 300px !important; overflow-y: auto !important;}
+
+.error-label:after {
+    content: '\A';
+    white-space: pre;
+  }
+
+  .form-group /deep/  .intl-tel-input {
+    display: block !important;
+  }

@@ -38,6 +38,7 @@ import {
   MatToolbarModule,
   MatTooltipModule,
   MatStepperModule,  
+  MatFormFieldModule
 } from '@angular/material';
 
 import { routing } from './app.routing';
@@ -48,7 +49,13 @@ import { PublicService } from './core/services/public/public.service';
 import { LookupsService } from './core/services/lookups/lookup.service';
 import { AuthService } from './core/services/common/auth.service';
 import { CommonService } from './core/services/common/common.service';
-
+import { FieldsService } from './core/services/fields/fields.service';
+import { CommonDataService } from "./core/services/common/common-data.service";
+import { FormdataService } from "./core/services/formdata/formdata.service";
+import { FormsService } from "./core/services/forms/forms.service";
+import { CompanySettingService } from "./core/services/admin/company-setting.service";
+import { RoleService } from "./core/services/role/role.service";
+import { LangresourceService } from "./core/services/langresource/langresource.service";
 import { SafeHtmlPipe } from "./core/pipes/safehtml.pipe";
 
 // Cloudinary module
@@ -87,17 +94,24 @@ const cloudinaryLib = {
     MatSelectModule,
     MatSidenavModule,
     MatSliderModule,
-    MatSlideToggleModule,
     MatSnackBarModule,
     MatSortModule,
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSlideToggleModule,
+    MatFormFieldModule
   ]
 })
 export class MaterialModule {}
 
+
+import {Injector} from '@angular/core';
+import {setAppInjector} from './app-injector';
+
+
+import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
 
 @NgModule({
   imports: [
@@ -110,6 +124,7 @@ export class MaterialModule {}
     ReactiveFormsModule,
     CloudinaryModule.forRoot(cloudinaryLib, config),
     MaterialModule,
+    AngularMultiSelectModule
   ],
   declarations: [
     AppComponent,
@@ -120,8 +135,19 @@ export class MaterialModule {}
     PublicService,
     LookupsService,
     AuthService,
-    CommonService
+    CommonService,
+    FieldsService,
+    CommonDataService,
+    FormdataService,
+    LangresourceService,
+    FormsService,
+    CompanySettingService,
+    RoleService
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(injector: Injector) {
+    setAppInjector(injector);
+  }
+ }

@@ -1,0 +1,103 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mrt0">
+
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p class="without-rt-btn"> </p>
+                            </div>
+                            <div class="col-sm-6 text-right">
+                                <button class="btn btn-sm btn-warning btn-simple help-btn mr0"><i class="material-icons help-font">help_outline</i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-content text-center" *ngIf="isLoadForms">
+                        <div class="loader">
+                            <svg class="circular" viewBox="25 25 50 50">
+                                <circle class="path" cx="50" cy="50" r="10" fill="none" stroke-width="2" stroke-miterlimit="10" />
+                            </svg>
+                        </div> 
+                    </div>
+
+                </div>
+                <div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header card-header-icon" data-background-color="rose">
+                                    <i class="material-icons">card_membership</i>
+                                </div>
+
+                                <div class="card-content">
+                                    <h4 class="card-title">
+                                        <span *ngIf="formsModel.dispalyformname"> {{formsModel.dispalyformname}} Form </span>
+                                        <span *ngIf="!formsModel.dispalyformname"> {{formsModel.formname}} Form </span>
+                                    </h4>
+                                </div>
+                                <div class="loader" *ngIf="!_visibility">
+                                    <svg class="circular" viewBox="25 25 50 50">
+                                        <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
+                                    </svg>
+                                </div>
+                                <div class="wizard-container">
+                                    <div class="wizard-card" data-color="rose" id="wizardProfile">
+                                        <div class="wizard-navigation">
+                                            <ul id="ul_o" class="nav nav-pills">
+                                                <li
+                                                    id="tab_{{i+1}}"
+                                                    class="active disabled-cls"
+                                                    *ngFor="let item of _tabLists;let i = index"
+                                                    (click)="onTabClick(i+1, item[0]['tabname'])">
+                                                    <a data-toggle="tab" href="#{{i+1}}" aria-expanded="true">{{item[0]['tabname']}} </a>
+                                                </li>
+                                            </ul>
+                                            <div class="moving-tab"> {{_defaultTabName}} </div>
+                                        </div>
+                                        <div class="tab-content">
+                                            <div class="tab-pane active"
+                                                *ngFor="let item of _tabLists;let i = index" [id]="i+1">
+
+                                                <app-survey-form-builder
+                                                    *ngIf="_visibility"
+                                                    [totalNumberOfTabs]="total_steps"
+                                                    [tabNumber]=[i+1]
+                                                    [tabData]=[item]
+                                                    [formsModel]=[formsModel]
+                                                    [allUsersLists]=[allUsersLists]
+                                                    [allRolesLists]=[allRolesLists]
+                                                    [inBuildlookupLists]=[inBuildlookupLists]
+                                                    [isdisablesavebutton]="isdisablesavebutton"
+                                                    (childSubmitData)="getSubmittedData($event)"
+                                                    (disabledDirtyForm)="disabledDirtyData($event)">
+                                                </app-survey-form-builder>
+                                                
+                                            </div>
+
+                                            
+
+                                        </div>
+                                    </div>
+                                    <div class="wizard-footer">
+                                        <div class="pull-right">
+                                        </div>
+                                        <div class="pull-left">
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                                
+
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

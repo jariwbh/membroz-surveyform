@@ -13,6 +13,7 @@ export class Configuration {
 
         this.headers.append('Content-Type', 'application/json');
         this.headers.append('Accept', 'application/json');
+        this.headers.append('authkey', '5a2cbf23ee5c2a1080793272');
 
         this.route.queryParams.subscribe(params => {
             

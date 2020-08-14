@@ -1,0 +1,741 @@
+<form #formtext *ngIf="dynamicForm" (ngSubmit)="onDynamicFormSubmit(dynamicForm.value, dynamicForm.valid)" [formGroup]="dynamicForm"
+    novalidate class="">
+    <div class="card-content">
+        <div *ngFor="let section of _sectionLists">
+            <div *ngIf="section[0].tabname == tabDataValue[0][0].tabname">
+                <h3>{{section[0].sectiondisplaytext}}</h3>
+                <div class="row" *ngFor="let fields of section; let lst = last">
+
+                    <div [ngSwitch]="fields.fieldtype">
+
+                        <div *ngIf="!fields.groupname">
+
+                            <div *ngIf="fields.isHidden != 'yes'">
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'short_answer'">
+                                    <div class="form-group label-floating-123 is-empty" [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <label class="control-label">
+
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+                                        </label>
+                                        <input #firsttext type="text" class="form-control font18" [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            [formControlName]="fields.fieldname" [(ngModel)]="fields.value">
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'calendar_timer'">
+                                    <div class="form-group label-floating-123 is-empty" [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <label class="control-label">
+                                            {{fields.fielddisplaytext}} 
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+                                        </label>
+                                        <input 
+                                            #firsttext 
+                                            class="form-control font18" 
+                                            [owlDateTimeTrigger]="dt2calendartime" 
+                                            [owlDateTime]="dt2calendartime"
+                                            [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            [formControlName]="fields.fieldname" 
+                                            [(ngModel)]="fields.value">
+                                        <owl-date-time 
+                                            [pickerType]="'both'" 
+                                            #dt2calendartime hour12Timer=true>
+                                        </owl-date-time>
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'time_only'">
+                                    <div class="form-group label-floating-123 is-empty" [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <label class="control-label">
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+                                        </label>
+                                        <input 
+                                            #firsttext 
+                                            class="form-control font18" 
+                                            [owlDateTimeTrigger]="dt2" 
+                                            [owlDateTime]="dt2"
+                                            [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            [formControlName]="fields.fieldname" 
+                                            [(ngModel)]="fields.value">
+                                        <owl-date-time 
+                                            [pickerType]="'timer'" 
+                                            #dt2 hour12Timer=true>
+                                        </owl-date-time>
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'slide_toggle'">
+                                    <div class="form-group label-floating-123 is-empty" [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <label class="control-label">
+
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+                                        </label>
+
+                                        <mat-slide-toggle
+                                            class="example-margin"
+                                            [checked]="fields.value"
+                                            [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            [formControlName]="fields.fieldname" 
+                                            [(ngModel)]="fields.value">
+                                        </mat-slide-toggle>
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'readonly'">
+                                    <div class="form-group label-floating-123 is-empty" [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <label class="control-label">
+
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+                                        </label>
+                                        <input #firsttext type="text" readonly class="form-control font18" [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            [formControlName]="fields.fieldname" [(ngModel)]="fields.defaultvalue">
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'number'">
+                                    <div class="form-group label-floating-123 is-empty" [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <label class="control-label">
+
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+                                        </label>
+                                        <input #firsttext type="number" class="form-control font18" [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            [formControlName]="fields.fieldname" [(ngModel)]="fields.value">
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'text'">
+                                    <div class="form-group label-floating-123 is-empty" [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <label class="control-label">
+
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+                                        </label>
+                                        <input #firsttext type="text" class="form-control font18" [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            [formControlName]="fields.fieldname" [(ngModel)]="fields.value">
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'editor'">
+                                    <div class="form-group label-floating-123 is-empty" [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <label class="control-label">
+
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+                                        </label>
+
+                                        <div id="summernote_{{fields.fieldname}}"></div>
+
+                                        <input #firsttext type="hidden" class="form-control font18" [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            [formControlName]="fields.fieldname" [(ngModel)]="fields.value">
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'paragraph'">
+                                    <div class="form-group no-float is-empty" [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <label class="control-label">
+
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+                                        </label>
+                                        <input type="text" class="form-control font18" [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            value [formControlName]="fields.fieldname" [(ngModel)]="fields.value">
+                                        <textarea class="form-control"> </textarea>
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'email'">
+                                    <div class="form-group label-floating-123 is-empty" [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <label class="control-label">
+
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+
+
+                                        </label>
+                                        <input #firsttext type="text" class="form-control font18" [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            [formControlName]="fields.fieldname" [(ngModel)]="fields.value">
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'mobile'">
+                                    <div class="form-group label-floating-123 is-empty" [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'has-error' : ' '">
+                                        <label class="control-label">
+
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+                                        </label>
+                                        <input #firsttext type="number" class="form-control font18" [ngClass]="!((dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted) || dynamicForm.get([fields.fieldname]).valid) ? 'error' : ' '"
+                                            [formControlName]="fields.fieldname" [(ngModel)]="fields.value">
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'image'">
+
+                                            <label class="control-label">
+                                                    {{fields.fielddisplaytext}}
+                                                    <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+                                                </label>
+                                            
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3">
+                                            <div class="form-group">
+                                                <img class="loading" src="assets/img/image-loader.GIF" style="height: 100px; width: 100px; display: none">
+
+                                                <div *ngIf="dynamicForm">
+                                                    <div *ngFor="let item of formImageArray[fields.fieldname]">
+                                                        <div class="choose-photo-relative">
+                                                            <img [src]="item" style="height: 200px; width: 200px;">
+                                                            <i class="material-icons upload-img-close" (click)="removeImg(item, fields.fieldname)">cancel</i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="btn btn-round btn-rose btn-file">
+
+                                                    <label class="upload_button upload-custom" for="fileupload_{{fields.fieldname}}">
+                                                        Choose Photo </label>
+                                                    <input type="file" id="fileupload_{{fields.fieldname}}" #fileInput
+                                                        ng2FileSelect [style.display]="'none'" [uploader]="customeUploader[fields.fieldname]"
+                                                        (change)="fileInput.value=''" />
+                                                    <input type="hidden" [id]="fields.fieldname" [formControlName]="fields.fieldname"
+                                                        [(ngModel)]="fields.value">
+                                                </div>
+
+
+
+
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'list'">
+
+                                    <div class="form-group no-float is-empty">
+                                        <label class="control-label">
+                                            {{fields.fielddisplaytext}}
+                                        </label>
+                                        <select [id]="fields.fieldname" [formControlName]="fields.fieldname" [(ngModel)]="fields.value"
+                                            class="selectpicker">
+                                            <option value="">Select {{fields.fielddisplaytext}}</option>
+                                            <option *ngFor="let opt of fields.lookupdata" [value]="opt.value">
+                                                {{opt.value}}
+                                            </option>
+                                        </select>
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'attachment'">
+
+                                        <label class="control-label">
+                                                {{fields.fielddisplaytext}}
+                                                <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+                                            </label>
+
+                                            
+                                    <div class="form-group">
+
+                                        <img class="loading_{{fields.fieldname}}" src="assets/img/image-loader.GIF"
+                                                style="height: 100px; width: 100px; display: none">
+
+                                        <div *ngIf="dynamicForm">
+                                            <div *ngFor="let item of formImageArray[fields.fieldname]">
+                                                <div class="choose-photo-relative">
+                                                    <!-- <img [src]="item" style="height: 200px; width: 200px;"> -->
+                                                    <img 
+                                                        *ngIf="item.extension == 'xlsx' || item.extension == 'xls'" 
+                                                        src="assets/img/xlsx.png" 
+                                                        style="height: 100px; width: 100px;">
+                                                    <img 
+                                                        *ngIf="item.extension == 'doc' || item.extension == 'docx'" 
+                                                        src="assets/img/doc.png" 
+                                                        style="height: 100px; width: 100px;">
+                                                    <img 
+                                                        *ngIf="item.extension == 'ppt' || item.extension == 'pptx'" 
+                                                        src="assets/img/ppt.png" 
+                                                        style="height: 100px; width: 100px;">
+                                                    <img 
+                                                        *ngIf="item.extension == 'csv'" 
+                                                        src="assets/img/csv.png" 
+                                                        style="height: 100px; width: 100px;">
+                                                    <img 
+                                                        *ngIf="item.extension == 'pdf'" 
+                                                        src="assets/img/pdf.png" 
+                                                        style="height: 100px; width: 100px;">
+                                                    <img
+                                                        *ngIf="item.extension !== 'xlsx' && item.extension !== 'xls' && item.extension !== 'doc' && item.extension !== 'docx' && item.extension !== 'pdf' && item.extension == 'ppt' && item.extension == 'pptx' && item.extension == 'csv'"
+                                                        src="assets/img/others.png" 
+                                                        style="height: 100px; width: 100px;">
+                                                    <img 
+                                                        *ngIf="item.extension == 'jpg' || item.extension == 'jpeg' || item.extension == 'gif' || item.extension == 'png' || item.extension == 'tif' || item.extension == 'tiff'"
+                                                        [src]="item.attachment" 
+                                                        style="height: 100px; width: 100px;">
+
+                                                    <audio controls  *ngIf="item.extension == 'mp3' || item.extension == 'amr'">
+                                                            <!-- <source [src]="fields.value" type="audio/mpeg"> -->
+                                                            <source [src]="item.attachment" type="audio/mpeg">
+                                                            {{langVisibility && langResource['brwsrnotsprt'] ? langResource['brwsrnotsprt'] : 'Your browser does not support the audio element.'}}
+                                                        </audio> 
+                                                        
+                                                    <i class="material-icons upload-img-close" (click)="removeImg(item, fields.fieldname)" [style.right]="item.extension == 'mp3' ? '-132px' : null">cancel</i>
+
+                                                    
+                                                    <button type="button" class="btn btn-primary" (click)="downloadlink(item.attachment)"> Download </button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="btn btn-round btn-rose btn-file">
+                                            <label
+                                                class="upload_button upload-custom"
+                                                for="fileupload_{{fields.fieldname}}" >
+                                                Upload </label>
+                                            <input
+                                                type="file"
+                                                id="fileupload_{{fields.fieldname}}"
+                                                #fileInput
+                                                ng2FileSelect
+                                                [style.display]="'none'"
+                                                [uploader]="customeUploader[fields.fieldname]"
+                                                (change)="fileInput.value=''"
+                                                multiple />
+                                            
+                                            <input type="hidden" [id]="fields.fieldname"
+                                                [formControlName]="fields.fieldname" [(ngModel)]="fields.value">
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'checkbox'">
+                                    <div class="form-group no-float is-empty">
+                                        <label class="control-label">
+                                            {{fields.fielddisplaytext}}
+                                        </label>
+                                        <div style="margin-top: 0px! important;" class="checkbox checkbox-inline" *ngFor="let look of fields.lookupdata; let i = index">
+                                            <label>
+                                                <input type="checkbox" id="check_{{fields.fieldname}}_{{i}}" [value]="look.value"
+                                                    [formControlName]="fields.fieldname"> {{look.value}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'checkbox'">
+                                    <div class="form-group no-float is-empty">
+                                        <label class="control-label">
+
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+                                        </label>
+                                        <div style="margin-top: 0px! important;" class="checkbox row">
+                                            <label class="col-sm-3" *ngFor="let look of fields.lookupdata; let i = index">
+                                                <input type="checkbox" id="check_{{fields.fieldname}}_{{i}}" [value]="look.value"
+                                                    [formControlName]="fields.fieldname"> {{look.value}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'radio'">
+                                    <div class="form-group no-float is-empty">
+                                        <label class="control-label mrb15">
+
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+                                        </label>
+
+                                        <mat-radio-group aria-label="Select an option" [formControlName]="fields.fieldname" [(ngModel)]="fields.value">
+                                            <mat-radio-button id="radio_{{fields.fieldname}}_{{i}}" *ngFor="let look of fields.lookupdata; let i = index" [value]="look.value">{{look.value}}</mat-radio-button>
+                                        </mat-radio-group>
+
+                                        
+
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'multiple_choice'">
+                                    <div class="form-group no-float is-empty">
+                                        <label class="control-label">
+
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+                                        </label>
+                                        <div style="margin-top: 0px! important;" class="radio row">
+                                            <label *ngFor="let look of fields.lookupdata; let i = index">
+                                                <input class="col-sm-3" type="radio" id="radio_{{fields.fieldname}}_{{i}}"
+                                                    [value]="look.value" [formControlName]="fields.fieldname" [(ngModel)]="fields.value">
+                                                {{look.value}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'linear_scale'">
+                                    <div class="form-group no-float is-empty">
+                                        <label class="control-label">
+
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+                                        </label>
+                                        <div class="row">
+                                            <label class="col-sm-2"></label>
+                                            <div [ngClass]="'col-sm-'+(fields.lookupdata.length + 1)">
+                                                <div style="margin-top: 0px! important;" class="radio checkbox-inline"
+                                                    *ngFor="let look of fields.lookupdata; let i = index">
+                                                    <label class="text-center">
+                                                        {{look.value}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <label class="col-sm-2"></label>
+                                        </div>
+                                        <div style="margin-top: 0px! important;" class="radio ">
+
+                                            <label class="col-sm-2">{{(fields.lookupdatalow != undefined &&
+                                                fields.lookupdatalow.key != undefined) ? fields.lookupdatalow.key : '' }}</label>
+                                            <div [ngClass]="'col-sm-'+(fields.lookupdata.length + 1)">
+                                                <div style="margin-top: 0px! important;" class="radio checkbox-inline"
+                                                    *ngFor="let look of fields.lookupdata; let i = index">
+                                                    <label class="text-center">
+                                                        <input type="radio" id="radio_{{fields.fieldname}}_{{i}}" [value]="look.value"
+                                                            [formControlName]="fields.fieldname" [(ngModel)]="fields.value">
+                                                        {{look.value}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <label class="col-sm-2">{{(fields.lookupdatahigh != undefined &&
+                                                fields.lookupdatahigh.key != undefined) ? fields.lookupdatahigh.key : '' }}</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'multiple_choice_grid'">
+                                    <div class="form-group no-float is-empty">
+                                        <label class="control-label">
+
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+                                        </label>
+                                        <div class="row">
+                                            <label class="col-sm-2"></label>
+                                            <div class="col-sm-10">
+                                                <div style="margin-top: 0px! important;" class="row radio checkbox-inline"
+                                                    *ngFor="let look of fields.lookupdata; let i = index">
+                                                    <label class="col-sm-2 text-center">
+                                                        {{look.value}}
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div style="margin-top: 0px! important;" class="row radio" *ngFor="let lookrow of fields.lookupdatarow; let y = index">
+
+                                            <label class="col-sm-2">{{(lookrow.key != undefined) ? lookrow.key : '---' }}</label>
+                                            
+                                            <div class="col-sm-10">
+                                                <div style="margin-top: 0px! important;" class="row radio checkbox-inline"
+                                                    *ngFor="let look of fields.lookupdata; let i = index">
+                                                    <label class=" col-sm-2 text-center">
+                                                        
+                                                        <input type="radio" id="radio_{{lookrow.value}}_{{look.value}}"
+                                                            [value]="lookrow.value+look.value" [formControlName]="fields.fieldname"
+                                                            trueFalseValue [attr.trueValue]="lookrow.value+look.value"
+                                                            falseValue="false" [(ngModel)]="fields.value">
+                                                        {{look.value}}
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'checkbox_grid'">
+                                    <div class="form-group no-float is-empty">
+                                        <label class="control-label">
+
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+                                        </label>
+                                        <div class="row">
+                                            <label class="col-sm-2"></label>
+                                            
+                                            <div class="col-sm-10">
+                                                <div style="margin-top: 0px! important;" class="row radio checkbox-inline"
+                                                    *ngFor="let look of fields.lookupdata; let i = index">
+                                                    <label class="col-sm-2 text-center">
+                                                        {{look.value}}
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div style="margin-top: 0px! important;" class="row checkbox" *ngFor="let lookrow of fields.lookupdatarow; let y = index">
+
+                                            <label class="col-sm-2">{{(lookrow.key != undefined) ? lookrow.key : '---' }}</label>
+                                            
+                                            <div class="col-sm-10">
+                                                <div style="margin-top: 0px! important;" class="row checkbox checkbox-inline"
+                                                    *ngFor="let look of fields.lookupdata; let i = index">
+                                                    <label class="col-sm-2 text-center">
+                                                    
+                                                        <input type="checkbox" id="check_{{findAndReplace(lookrow.value)}}_{{findAndReplace(look.value)}}"
+                                                            [value]="lookrow.value+look.value" trueFalseValue
+                                                            [attr.trueValue]="lookrow.value+look.value" falseValue="false"
+                                                            [formControlName]="fields.fieldname" (change)="onselectCheckbox(fields, $event)">
+                                                        {{look.value}}
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'context'">
+                                    <div class="form-group no-float is-empty">
+                                        <label class="control-label">
+
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+                                        </label>
+                                        <input type="text" class="form-control" [formControlName]="fields.fieldname"
+                                            [(ngModel)]="fields.value" disabled>
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'readonlytext'">
+                                    <div class="form-group no-float is-empty">
+                                        <label class="control-label">
+
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+                                        </label>
+                                        <div [innerHTML]="fields.defaulttext"></div>
+
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'datepicker'">
+
+                                    <div class="form-group no-float is-empty" [ngClass]="!(dynamicForm.get([fields.fieldname]).valid || (dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted)) ? 'has-error' : ' '">
+                                        <label class="control-label">
+
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+                                        </label>
+                                    
+
+                                        <mat-form-field>
+                                            <input [id]="fields.fieldname" matInput [matDatepicker]="resultPicker"
+                                                [formControlName]="fields.fieldname" [(ngModel)]="fields.value" placeholder="">
+                                            <span class="help-block" style="margin-top: 11px;display: block;">{{gDateFormat}}</span>
+                                            <mat-datepicker-toggle matSuffix [for]="resultPicker"></mat-datepicker-toggle>
+                                            <mat-datepicker #resultPicker startView="multi-year" [startAt]="startDate"></mat-datepicker>
+                                        </mat-form-field>
+
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'form'">
+                                    <div class="form-group no-float is-empty">
+                                        <label class="control-label">
+
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+                                        </label>
+                                        <input type="text" 
+                                            class="form-control"
+                                            ngui-auto-complete
+                                            [list-formatter]="autocompleListFormatter"
+                                            [source]="fields.formfieldfilterValue"
+                                            value-property-name=null
+                                            display-property-name="name" 
+                                            [formControlName]="fields.fieldname"
+                                            [(ngModel)]="fields.value"
+                                            placeholder="Select {{fields.fielddisplaytext}}">
+
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'form_multiselect'">
+                                    <div class="form-group no-float is-empty">
+                                        <label class="control-label">
+
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+                                        </label>
+                                        <angular2-multiselect
+                                                        [data]="fields.formfieldfilterValue" 
+                                                        [(ngModel)]="fields.value" 
+                                                        [formControlName]="fields.fieldname"
+                                                        [settings]="Texts">
+                                        </angular2-multiselect>
+                                    
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'formdata'">
+                                    <div class="form-group no-float is-empty">
+                                        <label class="control-label">
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+                                        </label>
+                                        <input 
+                                            [readonly]="fields.readonly" 
+                                            type="text" 
+                                            class="form-control"
+                                            ngui-auto-complete 
+                                            [list-formatter]="autocompleListFormatter"
+                                            [source]="fields.formfieldfilterValue" 
+                                            value-property-name="id"
+                                            display-property-name="name" 
+                                            [formControlName]="fields.fieldname"
+                                            [(ngModel)]="fields.value" 
+                                            placeholder="Select {{fields.fielddisplaytext}}">
+                                    
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'rating'">
+                                    <div class="form-group no-float is-empty">
+                                        <label class="control-label mrb15">
+
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+                                        </label>
+                                        <div> 
+                                            <ngb-rating 
+                                                max="{{fields.maxrating}}"
+                                                [(rate)]="fields.value"
+                                                [formControlName]="fields.fieldname">
+                                            </ngb-rating>
+                                        </div>
+
+                                    <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-offset-2 col-sm-8" *ngSwitchCase="'lookup'">
+                                    <div class="form-group no-float is-empty">
+                                        <label class="control-label">
+
+                                            {{fields.fielddisplaytext}}
+                                            <span *ngIf="fields.isAsterisk" style="color: red">*</span>
+
+                                        </label>
+
+                                        <input type="text" class="form-control" ngui-auto-complete [list-formatter]="autocompleListFormatter"
+                                            [source]="fields.inbuildlookupFieldValue" value-property-name=null
+                                            display-property-name="name" [formControlName]="fields.fieldname" [(ngModel)]="fields.value"
+                                            placeholder="Select {{fields.fielddisplaytext}}">
+
+                                        <span class="help-block">{{fields.description}}</span>
+                                    </div>
+                                </div>
+
+                                <small style="margin-left:18%;" [hidden]="dynamicForm.get([fields.fieldname]).valid || (dynamicForm.get([fields.fieldname]).pristine && !dynamicSubmitted)"
+                                    class="text-danger">
+                                    * {{fields.fielddisplaytext}} is
+                                    {{(fields.isMandatory == 'yes') ? ' Required' : ''}}
+                                    {{(fields.validationData === 'requiredVal') ? ' Required' : (fields.validationData ===
+                                    'emailVal') ? ' Invalid Email' : ((fields.validationData === 'urlVal') ? ' Invalid Url'
+                                    : ((fields.validationData === 'onlyNumberVal') ? ' Invalid number' :
+                                    ((fields.validationData === 'mobileNumberVal') ? ' Invalid Mob. No.' :
+                                    ((fields.validationData === 'onlyNumberOrDecimalVal') ? ' Invalid Number Or Decimal' :
+                                    ((fields.validationData === 'validPercentVal') ? ' Invalid percent' : '')))))}}
+                                </small>
+
+                            </div>
+
+                            <div *ngIf="fields.isHidden == 'yes'">
+
+                                <input 
+                                    *ngIf="fields.fieldtype == 'readonly'"
+                                    type="hidden" 
+                                    class="form-control font18" 
+                                    readonly
+                                    [formControlName]="fields.fieldname" 
+                                    [(ngModel)]="fields.defaultvalue">
+
+                                <input 
+                                    *ngIf="fields.fieldtype !== 'readonly'"
+                                    type="hidden" 
+                                    class="form-control font18" 
+                                    [formControlName]="fields.fieldname"
+                                    [(ngModel)]="fields.value">
+                            </div>
+
+                        </div>
+
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+            </div>
+            <div class="col-sm-6 text-right">
+                <button *ngIf="!ishidecancelbutton" class="btn btn-default btn-full-width" type="button">
+                    <i class="material-icons">close</i> Cancel
+                </button>
+
+                <button class="btn btn-rose btn-full-width" type="submit" [disabled]="isdisablesavebuttonValue">
+                    <i class="material-icons">save</i> {{_labelSubmit}}
+                </button>
+
+            </div>
+        </div>
+    </div>
+</form>
