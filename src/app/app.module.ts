@@ -56,6 +56,7 @@ import { FormsService } from "./core/services/forms/forms.service";
 import { CompanySettingService } from "./core/services/admin/company-setting.service";
 import { RoleService } from "./core/services/role/role.service";
 import { LangresourceService } from "./core/services/langresource/langresource.service";
+import { OrgnizationsettingService } from "./core/services/public/orgnizationsetting.service";
 import { SafeHtmlPipe } from "./core/pipes/safehtml.pipe";
 
 // Cloudinary module
@@ -142,7 +143,8 @@ import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
     LangresourceService,
     FormsService,
     CompanySettingService,
-    RoleService
+    RoleService,
+    OrgnizationsettingService
   ],
   bootstrap: [AppComponent]
 })

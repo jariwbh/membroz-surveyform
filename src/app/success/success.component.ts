@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { Configuration } from '../app.constants';
+
 @Component({
   selector: 'app-success',
   templateUrl: './success.component.html',
@@ -7,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SuccessComponent implements OnInit {
 
-  constructor() { }
+
+  redirect: any;
+
+  constructor(
+    private configuration: Configuration
+  ) { }
 
   ngOnInit(): void {
+    console.log("redirectUrl", this.configuration.redirectUrl);
+    if(this.configuration.redirectUrl) {
+      this.redirect = this.configuration.redirectUrl;
+    }
   }
 
 }
